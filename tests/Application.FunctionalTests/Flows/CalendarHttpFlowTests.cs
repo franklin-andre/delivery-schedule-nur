@@ -13,9 +13,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace delivery_schedule_management.Application.FunctionalTests.Flows;
 
 /// <summary>
+/// FLOW A — "Production and delivery" (MS3/MS5-facing, endpoints #1, #2, #4, #7 + ops trigger). Run: dotnet test --filter "TestCategory=FlowA".
 /// End-to-end integration flows driven ONLY through the public HTTP API against a real Postgres
 /// (Aspire + Respawn). One correct (happy) flow and several incorrect (unhappy) flows.
 /// </summary>
+[Category("FlowA")]
 public class CalendarHttpFlowTests : TestBase
 {
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web)

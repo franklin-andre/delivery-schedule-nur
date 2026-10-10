@@ -261,7 +261,7 @@ dotnet test tests/Application.FunctionalTests      # acceptance tests, real Post
 ./scripts/run-pact.ps1                         # Pact: consumer tests write pacts/, MS4 verifies the MS3 pact
 ```
 
-More detail: [unit testing & coverage](docs/testing/UNIT-TESTING.md) · [integration testing](docs/testing/INTEGRATION-TESTING.md) · [contract testing](docs/testing/CONTRACT-TESTING.md) · [AI test-writer environment](docs/testing/AI-TEST-ENV.md).
+Final testing layer overview: [FINAL-TESTING-LAYER](docs/testing/FINAL-TESTING-LAYER.md). More detail: [unit testing & coverage](docs/testing/UNIT-TESTING.md) · [integration testing](docs/testing/INTEGRATION-TESTING.md) · [contract testing](docs/testing/CONTRACT-TESTING.md) · [AI test-writer environment](docs/testing/AI-TEST-ENV.md).
 
 ## Database migrations
 

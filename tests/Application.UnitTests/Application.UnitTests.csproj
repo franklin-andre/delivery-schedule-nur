@@ -17,6 +17,7 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
         <PackageReference Include="Moq" />
         <PackageReference Include="Shouldly" />
         <PackageReference Include="System.Security.Cryptography.Xml" />
