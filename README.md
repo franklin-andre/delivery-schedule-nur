@@ -256,7 +256,10 @@ dotnet test tests/Domain.UnitTests             # fast, no external deps
 dotnet test tests/Application.UnitTests        # fast, no external deps
 dotnet test tests/Infrastructure.IntegrationTests  # spins up real Postgres via Aspire — slower, needs Docker
 dotnet test tests/Application.FunctionalTests      # acceptance tests, real Postgres via Aspire, needs Docker
+./scripts/coverage.ps1                         # unit tests + HTML coverage report in coverage-report/
 ```
+
+More detail: [unit testing & coverage](docs/testing/UNIT-TESTING.md) · [AI test-writer environment](docs/testing/AI-TEST-ENV.md).
 
 ## Database migrations
 

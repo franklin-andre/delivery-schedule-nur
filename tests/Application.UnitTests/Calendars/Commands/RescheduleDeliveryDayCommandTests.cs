@@ -30,7 +30,7 @@ public class RescheduleDeliveryDayCommandTests
         var handler = new RescheduleDeliveryDayCommandHandler(repository, new FakeApplicationDbContext(), clock);
 
         var result = await handler.Handle(
-            new RescheduleDeliveryDayCommand(calendarId, dayId, new DateOnly(2026, 8, 20)),
+            new RescheduleDeliveryDayCommand(calendarId, dayId, new DateOnly(2026, 8, 30)),
             CancellationToken.None);
 
         result.DayId.ShouldBe(dayId);

@@ -500,3 +500,7 @@ $RECYCLE.BIN/
 *.db
 *.db-shm
 *.db-wal
+
+# Test outputs
+coverage-report/
+TestResults/
