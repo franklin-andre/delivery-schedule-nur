@@ -29,3 +29,22 @@ Result and any doc fixes found are recorded in the PR description for Activity 1
 ```
 Use the test-writer agent to add unit tests for <ClassName>.
 ```
+
+## integration-test-writer
+| File | Purpose |
+|---|---|
+| `.claude/agents/integration-test-writer.md` | Integration/E2E agent: scope (`tests/Application.FunctionalTests`, `tests/Infrastructure.IntegrationTests`, Postman collection), mandatory happy + unhappy flow, report format |
+| `.claude/skills/integration-test-conventions/SKILL.md` | Aspire/Respawn patterns, HTTP + repository templates, false-failure traps (dates, 48h rule, ids) |
+| `.claude/skills/run-integration-tests/SKILL.md` | Docker preflight, exact commands, newman, definition of done, troubleshooting |
+| `scripts/run-newman.ps1` | Headless Postman run against docker compose |
+
+Extra guardrail: the agent must **report** production defects rather than edit `src/` (e.g. the missing `errors` map in 400 responses, found via newman, was reported and fixed as a separate, reviewed change).
+
+### Preflight (integration)
+1. `docker info --format '{{.ServerVersion}}'` prints a version (Docker Desktop running).
+2. Unit tests green (Activity 1 preflight).
+3. `dotnet test tests/Infrastructure.IntegrationTests` green before the agent starts.
+4. For Postman: Node.js available (`npx`), port 8080 free.
+
+### Validation run
+The agent was given a real task (address flow: one happy + one unhappy test) and had to follow only the docs. Findings are recorded in the Activity 2 PR description.

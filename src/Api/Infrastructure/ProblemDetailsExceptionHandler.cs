@@ -77,7 +77,8 @@ public class ProblemDetailsExceptionHandler : IExceptionHandler
         if (problemDetails is null) return false;
 
         httpContext.Response.StatusCode = statusCode;
-        await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
+        // Serialize by runtime type: with the static type ProblemDetails, ValidationProblemDetails.Errors would be dropped.
+        await httpContext.Response.WriteAsJsonAsync((object)problemDetails, problemDetails.GetType(), cancellationToken);
         return true;
     }
 }

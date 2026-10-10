@@ -6,7 +6,10 @@
       "Bash(dotnet test tests/Domain.UnitTests)",
       "Bash(dotnet test tests/Application.UnitTests)",
       "Bash(git status)",
-      "Bash(git status --short)"
+      "Bash(git status --short)",
+      "Bash(dotnet test tests/Infrastructure.IntegrationTests)",
+      "Bash(dotnet test tests/Application.FunctionalTests)",
+      "Bash(docker info --format {{.ServerVersion}})"
     ],
     "deny": [
       "Bash(git push --force:*)",

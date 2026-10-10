@@ -136,7 +136,7 @@ public class CalendarsEndpointsTests : TestBase
         var dayId = created.Days[0].Id;
 
         var response = await client.PutAsJsonAsync($"/api/v1/calendars/{created.CalendarId}/dates",
-            new RescheduleDateRequest(dayId, startDate.AddDays(5)));
+            new RescheduleDateRequest(dayId, startDate.AddDays(20)));
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
         var result = await response.Content.ReadFromJsonAsync<RescheduleDeliveryDayResult>(JsonOptions);
