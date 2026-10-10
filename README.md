@@ -258,9 +258,10 @@ dotnet test tests/Infrastructure.IntegrationTests  # spins up real Postgres via 
 dotnet test tests/Application.FunctionalTests      # acceptance tests, real Postgres via Aspire, needs Docker
 ./scripts/coverage.ps1                         # unit tests + HTML coverage report in coverage-report/
 ./scripts/run-newman.ps1                       # Postman flows (happy + error) headless against docker compose
+./scripts/run-pact.ps1                         # Pact: consumer tests write pacts/, MS4 verifies the MS3 pact
 ```
 
-More detail: [unit testing & coverage](docs/testing/UNIT-TESTING.md) · [integration testing](docs/testing/INTEGRATION-TESTING.md) · [AI test-writer environment](docs/testing/AI-TEST-ENV.md).
+More detail: [unit testing & coverage](docs/testing/UNIT-TESTING.md) · [integration testing](docs/testing/INTEGRATION-TESTING.md) · [contract testing](docs/testing/CONTRACT-TESTING.md) · [AI test-writer environment](docs/testing/AI-TEST-ENV.md).
 
 ## Database migrations
 

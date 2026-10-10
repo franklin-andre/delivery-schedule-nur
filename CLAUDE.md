@@ -188,6 +188,12 @@ Postgres instance (Aspire-orchestrated via `TestAppHost`, reset with Respawn bet
 `IClock` is the real `SystemClock` in both (no override wired in `WebApiFactory`), so 48h-boundary
 cases use `DateTime.UtcNow`-relative dates rather than a fixed instant.
 
+### Testing activities (course work, branches `activity-1..3`)
+Unit tests (NUnit + Moq + Shouldly, `scripts/coverage.ps1`), integration tests (Aspire/Postgres + Respawn, `scripts/run-newman.ps1`) and
+Pact contract tests (`scripts/run-pact.ps1`, `pacts/`) are documented in `docs/testing/`. Note: the stack is **NUnit + Aspire testing**, not xUnit/Testcontainers as the
+original plan text says. AI writers live in `.claude/agents` (`test-writer`, `integration-test-writer`, `pact-writer`) with skills in `.claude/skills`.
+`Catalog:UseMock=false` + `Catalog:BaseUrl` switches `ICatalogPort` to the real `HttpCatalogPort` (contract with MS2 still unreconciled, see gap 2 below).
+
 ### Where things live
 - Repos: `ICalendarRepository`/`IProductionOrderRepository` (ports in Application) → `CalendarRepository`/`ProductionOrderRepository` (impl in `Infrastructure/Data/Repositories`), take the concrete `ApplicationDbContext` directly, not `IApplicationDbContext` (that interface is just the `SaveChangesAsync` unit-of-work).
 - Mocked `ICatalogPort`: `Infrastructure/Catalog/MockCatalogPort.cs` — deterministic fixture keyed by `planId`+`date`, no real HTTP call.

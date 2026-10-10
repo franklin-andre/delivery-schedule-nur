@@ -1,0 +1,86 @@
+{
+  "consumer": {
+    "name": "MS4DeliveryCalendar"
+  },
+  "interactions": [
+    {
+      "description": "a request for a plan day of an unknown plan",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "plan 33333333-3333-3333-3333-333333333333 does not exist"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/catalog/plans/33333333-3333-3333-3333-333333333333/day/2030-01-15"
+      },
+      "response": {
+        "status": 404
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "a request for the recipe and portions of a plan day",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "plan 33333333-3333-3333-3333-333333333333 has a recipe for 2030-01-15"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/catalog/plans/33333333-3333-3333-3333-333333333333/day/2030-01-15"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "portions": 2,
+            "recipeRef": "recipe-lentil-stew"
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$.portions": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ]
+            },
+            "$.recipeRef": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      },
+      "type": "Synchronous/HTTP"
+    }
+  ],
+  "metadata": {
+    "pactRust": {
+      "ffi": "0.4.27",
+      "models": "1.2.8"
+    },
+    "pactSpecification": {
+      "version": "4.0"
+    }
+  },
+  "provider": {
+    "name": "MS2Catalog"
+  }
+}
