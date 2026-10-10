@@ -39,6 +39,18 @@ public static class DependencyInjection
         builder.Services.AddScoped<ICalendarRepository, CalendarRepository>();
         builder.Services.AddScoped<IProductionOrderRepository, ProductionOrderRepository>();
         builder.Services.AddScoped<IClock, SystemClock>();
-        builder.Services.AddSingleton<ICatalogPort, MockCatalogPort>();
+
+        // Catalog (MS2): mocked by default; set Catalog:UseMock=false and Catalog:BaseUrl to call the real service.
+        if (builder.Configuration.GetValue("Catalog:UseMock", true))
+        {
+            builder.Services.AddSingleton<ICatalogPort, MockCatalogPort>();
+        }
+        else
+        {
+            var baseUrl = builder.Configuration["Catalog:BaseUrl"];
+            Guard.Against.NullOrWhiteSpace(baseUrl, message: "Catalog:BaseUrl is required when Catalog:UseMock is false.");
+
+            builder.Services.AddHttpClient<ICatalogPort, HttpCatalogPort>(client => client.BaseAddress = new Uri(baseUrl));
+        }
     }
 }

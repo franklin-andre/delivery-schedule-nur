@@ -1,0 +1,397 @@
+{
+  "consumer": {
+    "name": "MS3"
+  },
+  "interactions": [
+    {
+      "description": "a request for a calendar id that does not exist",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "no calendar with id 999 exists"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/calendars/999"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "status": 404
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$.status": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ]
+            }
+          }
+        },
+        "status": 404
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "a request for an existing calendar by id",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "a calendar with id 1 exists"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/calendars/1"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "days": [
+              {
+                "id": 1,
+                "status": "Pending"
+              }
+            ],
+            "id": 1,
+            "status": "Active"
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$.days": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type",
+                  "min": 1
+                }
+              ]
+            },
+            "$.days[*].id": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ]
+            },
+            "$.days[*].status": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^(Pending|Scheduled|ReadyForProduction|InProduction|Delivered|Failed|Cancelled)$"
+                }
+              ]
+            },
+            "$.id": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ]
+            },
+            "$.status": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^(Active|Completed)$"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "a request for tomorrow's consolidated production order",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "tomorrow has one day ready for production"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/calendars/active-tomorrow"
+      },
+      "response": {
+        "body": {
+          "content": [
+            {
+              "address": "742 Evergreen Terrace, Springfield",
+              "latitude": 10.5,
+              "longitude": -20.25,
+              "packId": 1,
+              "patientId": "22222222-2222-2222-2222-222222222222",
+              "planId": "33333333-3333-3333-3333-333333333333"
+            }
+          ],
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type",
+                  "min": 1
+                }
+              ]
+            },
+            "$[*].address": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$[*].latitude": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "decimal"
+                }
+              ]
+            },
+            "$[*].longitude": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "decimal"
+                }
+              ]
+            },
+            "$[*].packId": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ]
+            },
+            "$[*].patientId": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$"
+                }
+              ]
+            },
+            "$[*].planId": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "a request to create a 15-day schedule for a new contract",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "no calendar exists for contract 11111111-1111-1111-1111-111111111111"
+        }
+      ],
+      "request": {
+        "body": {
+          "content": {
+            "contractId": "11111111-1111-1111-1111-111111111111",
+            "duration": 15,
+            "patientId": "22222222-2222-2222-2222-222222222222",
+            "planId": "33333333-3333-3333-3333-333333333333",
+            "startDate": "2030-01-01"
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ]
+        },
+        "method": "POST",
+        "path": "/api/v1/schedule"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "calendarId": 1,
+            "days": [
+              {
+                "id": 1,
+                "status": "Pending"
+              }
+            ]
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$.calendarId": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ]
+            },
+            "$.days": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type",
+                  "min": 15
+                }
+              ]
+            },
+            "$.days[*].id": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ]
+            },
+            "$.days[*].status": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "^(Pending|Scheduled|ReadyForProduction|InProduction|Delivered|Failed|Cancelled)$"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "a request to create a schedule with an unsupported duration",
+      "pending": false,
+      "request": {
+        "body": {
+          "content": {
+            "contractId": "11111111-1111-1111-1111-111111111111",
+            "duration": 20,
+            "patientId": "22222222-2222-2222-2222-222222222222",
+            "planId": "33333333-3333-3333-3333-333333333333",
+            "startDate": "2030-01-01"
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ]
+        },
+        "method": "POST",
+        "path": "/api/v1/schedule"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "errors": {
+              "Duration": [
+                "Duration must be 15 or 30 days."
+              ]
+            },
+            "status": 400
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json; charset=utf-8"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$.errors.Duration": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type",
+                  "min": 1
+                }
+              ]
+            },
+            "$.status": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ]
+            }
+          }
+        },
+        "status": 400
+      },
+      "type": "Synchronous/HTTP"
+    }
+  ],
+  "metadata": {
+    "pactRust": {
+      "ffi": "0.4.27",
+      "models": "1.2.8"
+    },
+    "pactSpecification": {
+      "version": "4.0"
+    }
+  },
+  "provider": {
+    "name": "MS4DeliveryCalendar"
+  }
+}

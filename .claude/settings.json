@@ -9,7 +9,9 @@
       "Bash(git status --short)",
       "Bash(dotnet test tests/Infrastructure.IntegrationTests)",
       "Bash(dotnet test tests/Application.FunctionalTests)",
-      "Bash(docker info --format {{.ServerVersion}})"
+      "Bash(docker info --format {{.ServerVersion}})",
+      "Bash(dotnet test tests/Contract.Consumer.Tests)",
+      "Bash(dotnet test tests/Contract.Provider.Tests)"
     ],
     "deny": [
       "Bash(git push --force:*)",

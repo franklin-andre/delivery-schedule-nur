@@ -48,3 +48,21 @@ Extra guardrail: the agent must **report** production defects rather than edit `
 
 ### Validation run
 The agent was given a real task (address flow: one happy + one unhappy test) and had to follow only the docs. Findings are recorded in the Activity 2 PR description.
+
+## pact-writer
+| File | Purpose |
+|---|---|
+| `.claude/agents/pact-writer.md` | Contract agent: MS4 as provider (MS3) and consumer (MS2), scope, report-don't-patch rule |
+| `.claude/skills/pact-consumer-conventions/SKILL.md` | PactNet 5 template, matchers, JSON-casing pitfalls, mock-server semantics |
+| `.claude/skills/pact-provider-verification/SKILL.md` | Provider host, adding states, reading failures, "prove it can fail" |
+| `scripts/run-pact.ps1` | Consumer then provider run |
+
+Guardrail: a failing verification is a real contract break; the agent reports it and never loosens a pact or edits `src/` to get green.
+
+### Preflight (contract)
+1. `dotnet test tests/Contract.Consumer.Tests` runs without Docker; provider step needs `docker info` OK.
+2. `pacts/` is tracked: regenerate, then review the JSON diff before committing.
+3. PactNet native library is restored with the NuGet package (Windows/Linux/macOS); no separate install.
+
+### Validation run
+Agent given: add an interaction for `GET /api/v1/calendars/{id}` end to end (consumer test, provider state, regenerated pact, both sides green). Findings in the Activity 3 PR description.
