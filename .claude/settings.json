@@ -1,12 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "Bash(dotnet build:*)",
-      "Bash(dotnet test:*)",
+      "Bash(dotnet build)",
       "Bash(dotnet tool restore)",
-      "Bash(dotnet tool run reportgenerator:*)",
-      "Bash(git status:*)",
-      "Bash(git diff:*)"
+      "Bash(dotnet test tests/Domain.UnitTests)",
+      "Bash(dotnet test tests/Application.UnitTests)",
+      "Bash(git status)",
+      "Bash(git status --short)"
     ],
     "deny": [
       "Bash(git push --force:*)",
