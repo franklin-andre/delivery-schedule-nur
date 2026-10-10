@@ -1,0 +1,37 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  unit:
+    name: Unit tests + coverage (>= 80%)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - name: Coverage gate
+        shell: pwsh
+        run: ./scripts/coverage.ps1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage-report
+
+  integration:
+    name: Integration + contract tests (Docker)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - run: dotnet test tests/Infrastructure.IntegrationTests
+      - run: dotnet test tests/Application.FunctionalTests
+      - name: Pact consumer + provider
+        shell: pwsh
+        run: ./scripts/run-pact.ps1

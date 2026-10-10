@@ -59,6 +59,12 @@ var result = new CreateScheduleCommandValidator().TestValidate(cmd);
 result.ShouldHaveValidationErrorFor(x => x.Duration);
 ```
 
+## EF-backed unit tests (repositories, interceptors, seeder)
+Use `Infrastructure/InMemoryDb` (EF InMemory provider, real model/configurations, no Docker). Pass interceptors to its constructor. Do NOT add SQLite
+(its native package is flagged by NuGet audit and warnings are errors). InMemory cannot test unique indexes or `MigrateAsync` — that is integration-test territory.
+`IMediator.Publish(BaseEvent)` binds to the generic overload: verify with `m.Publish(It.IsAny<BaseEvent>(), It.IsAny<CancellationToken>())`.
+Coverage gate: `./scripts/coverage.ps1` must stay >= 80%.
+
 ## Layout, namespaces, naming details
 - Mirror `src/Application/Common/<X>` under `tests/Application.UnitTests/Common/<X>` (e.g. `Models/`, `Exceptions/`).
 - Namespace = `delivery_schedule_management.<Project>.UnitTests.<folder path>` (e.g. `delivery_schedule_management.Application.UnitTests.Common.Models`).

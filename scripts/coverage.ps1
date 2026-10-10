@@ -5,10 +5,10 @@
   Domain.UnitTests and Application.UnitTests need no Docker. Output goes to coverage-report/ (git-ignored).
 .EXAMPLE
   ./scripts/coverage.ps1
-  ./scripts/coverage.ps1 -Threshold 80   # fail if line coverage is below 80%
+  ./scripts/coverage.ps1 -Threshold 90   # fail if line coverage is below 90% (default: 80)
 #>
 param(
-    [int]$Threshold = 0
+    [int]$Threshold = 80
 )
 
 $ErrorActionPreference = 'Stop'

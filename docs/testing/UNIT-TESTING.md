@@ -12,8 +12,8 @@ Unit tests cover the **Domain** and **Application** layers. They need no Docker,
 | Coverage | coverlet.collector + ReportGenerator (`dotnet-tools.json`) |
 
 ## Projects
-- `tests/Domain.UnitTests` — entities, value objects, domain service, exceptions (50 tests).
-- `tests/Application.UnitTests` — handlers, validators, pipeline behaviours, adapters without a DB (56 tests).
+- `tests/Domain.UnitTests` — entities, value objects, domain service, exceptions (56 tests).
+- `tests/Application.UnitTests` — handlers, validators, pipeline behaviours, adapters, EF repositories/interceptors/seeder on InMemory (79 tests).
 
 ## Where mocks are used
 | Test | What is mocked | What it proves |
@@ -32,15 +32,20 @@ dotnet test tests/Application.UnitTests
 ```
 (`dotnet test` takes one project per call.)
 
-## Coverage (unit tests only, `coverage.runsettings`)
+## Coverage (unit tests only, `coverage.runsettings`) — final project gate: >= 80%
+`./scripts/coverage.ps1` fails below 80% line coverage (`-Threshold` to change).
+
 | Assembly | Line coverage |
 |---|---|
-| Application | 94.6% |
-| Domain | 76.8% (BaseEntity/ValueObject helpers unused by unit paths) |
-| Infrastructure | 2.1% — EF/repositories are covered by Docker-based integration tests (Activity 2) |
-| **Total** | **53.6%** line, 68.8% branch |
+| Application | 99.5% |
+| Domain | 99.4% |
+| Infrastructure | 96% (EF configurations, interceptors, seeder, repositories, DI, HTTP catalog adapter) |
+| **Total** | **98.1%** lines, 89.3% branches |
 
-Business-critical classes (`DeliveryDay`, `DeliveryCalendar`, all handlers, all validators, all behaviours) are at 90–100%.
+Scope: Domain + Application + Infrastructure assemblies. EF migrations and generated code are excluded (`coverage.runsettings`).
+The `Api` project (Minimal API endpoints, exception handler) is not instrumented here: it is covered end to end by the HTTP integration flows.
+Infrastructure runs against the EF **InMemory** provider (no Docker, no native libs); relational behaviour (unique index per contract, Npgsql mapping,
+migrations) is proven by `Infrastructure.IntegrationTests` against real Postgres.
 
 ## Fixed along the way
 `RescheduleDeliveryDayCommandTests.Handle_ShouldUpdateDate_WhenOutsideLockWindow` was failing: it rescheduled to Aug 20,
